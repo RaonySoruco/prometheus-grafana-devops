@@ -1,0 +1,43 @@
+version: '2.0'
+
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    hostname: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - "./prometheus:/prometheus"
+      - "./alert.rules:/etc/prometheus/alert.rules"
+      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+    command: [ "-config.file=/etc/prometheus/prometheus.yml", "-storage.local.path=/prometheus", "-web.console.libraries=/etc/prometheus/console_libraries", "-web.console.templates=/etc/prometheus/consoles", "-alertmanager.url=http://localhost:9093" ]
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    hostname: alertmanager
+    ports:
+      - "9093:9093"
+    volumes:
+      - "./alertmanager:/alertmanager"
+      - "./alertmanager.yml:/etc/alertmanager/config.yml"
+
+  grafana:
+    image: grafana/grafana:latest
+    hostname: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - "GF_SERVER_ROOT_URL=http://prom-server.example.com:3000"
+      - "GF_SECURITY_ADMIN_PASSWORD=supersenha"
+
+  nodeexporter:
+    image: prom/node-exporter:latest
+    hostname: node-exporter
+    ports:
+      - "9100:9100"
+    network_mode: "host"
+    volumes:
+      - "/proc:/host/proc"
+      - "/sys:/host/sys"
+      - "/:/rootfs"
+    command: [ "-collector.procfs", "/host/proc", "-collector.sysfs", "/host/sys" ]

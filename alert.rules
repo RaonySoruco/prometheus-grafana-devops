@@ -1,0 +1,8 @@
+ALERT InstanceDown
+  IF up == 0
+  FOR 10s
+  LABELS { serverity = "high" }
+  ANNOTATIONS {
+    summary = "Instance {{$labels.instance}} is Down",
+    description = "{{$labels.instance}} has been down for more then 10s"
+  }

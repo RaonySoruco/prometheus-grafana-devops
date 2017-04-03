@@ -1,0 +1,5 @@
+.vagrant
+prometheus/*
+!prometheus/.gitkeep
+alertmanager/*
+!alertmanager/.gitkeep

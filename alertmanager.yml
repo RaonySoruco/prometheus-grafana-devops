@@ -1,0 +1,20 @@
+global:
+  smtp_from: example@example.com
+  smtp_smarthost: example.com
+  smtp_auth_username: example@example.com
+  smtp_auth_password: PASSWORD
+  smtp_require_tls: false
+
+route:
+  receiver: 'demo'
+  group_wait: 5s
+  group_interval: 5s
+  repeat_interval: 10m
+
+receivers:
+  - name: 'demo'
+    slack_configs:
+    - api_url: 'slack-webhook-url'
+      text: "<!channel> \nDescription: {{ .CommonAnnotations.description }}\nSummary: {{ .CommonAnnotations.summary }}"
+    email_configs:
+    - to: example@example.com

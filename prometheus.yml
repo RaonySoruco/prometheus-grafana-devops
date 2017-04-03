@@ -1,0 +1,21 @@
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  external_labels:
+      monitor: 'DevOps Floripa'
+rule_files:
+  - '/etc/prometheus/alert.rules'
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'prometheus-node-exporter'
+    static_configs:
+      - targets: ['192.168.100.10:9100']
+        labels:
+          group: 'demo'
+      - targets: ['192.168.100.11:9100']
+        labels:
+          group: 'demo'
+
